@@ -9,7 +9,6 @@ https://www.epasatiempos.es/juego-4-en-raya.php
 import java.util.Scanner;
 
 public class Conecta4_Main {
-    static Scanner escanear = new Scanner(System.in);
     static String jugador1 = "x";
     static String jugador2 = "o";
     static boolean victoria;
@@ -40,6 +39,7 @@ public class Conecta4_Main {
     }
 
     public static void jugadorInserta() {
+        Scanner escanear = new Scanner(System.in);
         int movActual;
         boolean movValido = false;
 
@@ -68,6 +68,7 @@ public class Conecta4_Main {
                 System.out.println("ERROR - La columna seleccionada está llena");
             }
         }
+        escanear.close();
     }
 
     public static void pintarTablero() {
@@ -90,7 +91,7 @@ public class Conecta4_Main {
             }
         }
         //Comprobación Horizontal a Derecha
-        for (int j = ultimoMovimiento + 1; j <= Math.min(tablero[ultimaFila].length-1, (ultimoMovimiento + 3)); j--) {
+        for (int j = ultimoMovimiento + 1; j <= Math.min(tablero[ultimaFila].length-1, (ultimoMovimiento + 3)); j++) {
             if (tablero[ultimaFila][j].equals(jugadorActual)) {
                 contarFichasH++;
             } else {
@@ -187,7 +188,7 @@ public class Conecta4_Main {
     }
 
     public static void cambiarJugador() {
-        if (jugadorActual == jugador1) {
+        if (jugadorActual.equals(jugador1)) {
             jugadorActual = jugador2;
         } else {
             jugadorActual = jugador1;
@@ -196,11 +197,24 @@ public class Conecta4_Main {
 
     public static void mensajeFinal() {
         if (victoria) {
-            if (jugadorActual==jugador1) {
-                System.out.println("ENHORABUENA - HA GANADO EL Jugador 1 ( \"x\" )");
+            if (jugadorActual.equals(jugador1)) {
+                System.out.println("ENHORABUENA - HA GANADO EL JUGADOR 1 ( \"x\" )");
             }else{
-                System.out.println("ENHORABUENA - HA GANADO EL Jugador 2 ( \"o\" )");
+                System.out.println("ENHORABUENA - HA GANADO EL JUGADOR 2 ( \"o\" )");
             }
+            System.out.print("""
+                    
+                                                       .''.\s
+                           .''.      .        *''*    :_\\/_:     .\s
+                          :_\\/_:   _\\(/_  .:.*_\\/_*   : /\\ :  .'.:.'.\s
+                      .''.: /\\ :   ./)\\   ':'* /\\ * :  '..'.  -=:o:=-\s
+                     :_\\/_:'.:::.    ' *''*    * '.\\'/.' _\\(/_'.':'.'\s
+                     : /\\ : :::::     *_\\/_*     -= o =-  /)\\    '  *\s
+                      '..'  ':::'     * /\\ *     .'/.\\'.   '\s
+                          *            *..*         :\s
+                           *\s
+                            *\s
+                    """);
         } else {
             System.out.println("La partida ha finalizado en empate");
         }
