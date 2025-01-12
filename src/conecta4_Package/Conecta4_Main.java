@@ -9,6 +9,7 @@ https://www.epasatiempos.es/juego-4-en-raya.php
 import java.util.Scanner;
 
 public class Conecta4_Main {
+    static Scanner escanear = new Scanner(System.in);
     static String jugador1 = "x";
     static String jugador2 = "o";
     static boolean victoria;
@@ -22,7 +23,7 @@ public class Conecta4_Main {
     public static void main(String[] args) {
         victoria = false;
         contador = tablero.length * tablero[0].length;
-        reyenarTableroInicial();
+        rellenarTableroInicial();
         jugadorActual = jugador1;
 
         while (true) {
@@ -36,10 +37,27 @@ public class Conecta4_Main {
         }
         pintarTablero();
         mensajeFinal();
+        escanear.close();
+    }
+
+    public static void rellenarTableroInicial() {
+        for (int i = 0; i < tablero.length; i++) {
+            for (int j = 0; j < tablero[i].length; j++) {
+                tablero[i][j] = " ";
+            }
+        }
+    }
+
+    public static void pintarTablero() {
+        for (int i = 0; i < tablero.length; i++) {
+            for (int j = 0; j < tablero[i].length; j++) {
+                System.out.print(tablero[i][j] + "\t");
+            }
+            System.out.print("\b\n");
+        }
     }
 
     public static void jugadorInserta() {
-        Scanner escanear = new Scanner(System.in);
         int movActual;
         boolean movValido = false;
 
@@ -68,21 +86,11 @@ public class Conecta4_Main {
                 System.out.println("ERROR - La columna seleccionada está llena");
             }
         }
-        escanear.close();
-    }
-
-    public static void pintarTablero() {
-        for (int i = 0; i < tablero.length; i++) {
-            for (int j = 0; j < tablero[i].length; j++) {
-                System.out.print(tablero[i][j] + "\t");
-            }
-            System.out.print("\b\n");
-        }
     }
 
     public static void comprobar4() {
-        int contarFichasH = 0;
         //Comprobación Horizontal a Izquierda
+        int contarFichasH = 0;
         for (int j = ultimoMovimiento; j >= Math.max(0, (ultimoMovimiento - 3)); j--) {
             if (tablero[ultimaFila][j].equals(jugadorActual)) {
                 contarFichasH++;
@@ -176,14 +184,6 @@ public class Conecta4_Main {
         }
         if (contarFichasD2 >= 4) {
             victoria = true;
-        }
-    }
-
-    public static void reyenarTableroInicial() {
-        for (int i = 0; i < tablero.length; i++) {
-            for (int j = 0; j < tablero[i].length; j++) {
-                tablero[i][j] = " ";
-            }
         }
     }
 
