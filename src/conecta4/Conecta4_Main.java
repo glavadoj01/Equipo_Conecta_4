@@ -2,7 +2,7 @@ package conecta4;
 
 import java.util.Scanner;
 
-public class Conecta4_ {
+public class Conecta4_Main {
     static Scanner escanear = new Scanner(System.in);
     static final String JUGADOR1 = "X";
     static final String JUGADOR2 = "O";
