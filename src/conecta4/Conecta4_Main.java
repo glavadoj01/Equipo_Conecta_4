@@ -16,7 +16,7 @@ public class Conecta4_Main {
     static final int FILAS = 6;
     static final int COLUMNAS = 7;
     static String[][] tablero = new String[FILAS][COLUMNAS];
-    static int contador;
+    static int contadorCasillasVacias;
     static int ultimoMovimiento;
     static int ultimaFila;
     static String jugadorActual;
@@ -25,16 +25,16 @@ public class Conecta4_Main {
         boolean repetirPartida;
         do {
             victoria = false;
-            contador = FILAS * COLUMNAS;
+            contadorCasillasVacias = FILAS * COLUMNAS;
             rellenarTableroInicial();
             jugadorActual = JUGADOR1;
             cabecera();
-            
-            while (true) {               
+
+            while (true) {
                 pintarTablero();
                 jugadorInserta();
                 comprobar4();
-                if (victoria || contador == 0) {
+                if (victoria || contadorCasillasVacias == 0) {
                     break;
                 }
                 cambiarJugador();
@@ -43,7 +43,7 @@ public class Conecta4_Main {
             mensajeFinal();
 
             repetirPartida = volverAjugar();
-        }while(repetirPartida);
+        } while (repetirPartida);
 
 
         escanear.close();
@@ -72,7 +72,7 @@ public class Conecta4_Main {
         //Números de cada columna
         System.out.print("   ");
         for (int j = 1; j <= COLUMNAS; j++) {
-            System.out.print(j + "   ");
+            System.out.print(" " + j + "  ");
         }
         System.out.println();
 
@@ -91,7 +91,7 @@ public class Conecta4_Main {
             }
             System.out.println();
 
-            //Lineas que separan cada fila
+            //Líneas que separan cada fila
             System.out.print("  ·");
             for (int j = 0; j < COLUMNAS; j++) {
                 System.out.print("---·");
@@ -110,18 +110,18 @@ public class Conecta4_Main {
             while (true) {
                 System.out.print("Ingrese un movimiento valido: ");
                 movActual = escanear.nextInt();
-                if (movActual >= 1 && movActual <= COLUMNAS) {
+                if (movActual >= 1 && movActual <= COLUMNAS) { //Comprobar que la columna introducida es válida
                     movActual = movActual - 1;
                     break;
                 }
                 System.out.println("ERROR - Introducir una columna valida");
             }
             for (int i = tablero.length - 1; i >= 0; i--) {
-                if (tablero[i][movActual].equals(" ")) {
-                    tablero[i][movActual] = jugadorActual;
-                    ultimoMovimiento = movActual;
-                    ultimaFila = i;
-                    contador--;
+                if (tablero[i][movActual].equals(" ")) {    // Buscar la 1ª casilla vacía desde abajo
+                    tablero[i][movActual] = jugadorActual;           // Insertar ficha
+                    ultimoMovimiento = movActual;                    // Guardar la columna del último movimiento
+                    ultimaFila = i;                                  // Guardar la fila del último movimiento
+                    contadorCasillasVacias--;                        // Restar 1 al contador de casillas vacías
                     movValido = true;
                     break;
                 }
@@ -133,8 +133,12 @@ public class Conecta4_Main {
     }
 
     public static void comprobar4() {
-        //Comprobación Horizontal a Izquierda
         int contarFichasH = 0;
+        int contarFichasV = 0;
+        int contarFichasD1 = 0;
+        int contarFichasD2 = 0;
+
+        //Comprobación Horizontal a Izquierda
         for (int j = ultimoMovimiento; j >= Math.max(0, (ultimoMovimiento - 3)); j--) {
             if (tablero[ultimaFila][j].equals(jugadorActual)) {
                 contarFichasH++;
@@ -143,32 +147,22 @@ public class Conecta4_Main {
             }
         }
         //Comprobación Horizontal a Derecha
-        for (int j = ultimoMovimiento + 1; j <= Math.min(tablero[ultimaFila].length-1, (ultimoMovimiento + 3)); j++) {
+        for (int j = ultimoMovimiento + 1; j <= Math.min(tablero[ultimaFila].length - 1, (ultimoMovimiento + 3)); j++) {
             if (tablero[ultimaFila][j].equals(jugadorActual)) {
                 contarFichasH++;
             } else {
                 break;
             }
         }
-        if (contarFichasH >= 4) {
-            victoria = true;
-        }
-
         // Comprobación Vertical hacia abajo
-        int contarFichasV = 0;
-        for (int i = ultimaFila; i <= Math.min(tablero.length-1, ultimaFila + 3); i++) {
+        for (int i = ultimaFila; i <= Math.min(tablero.length - 1, ultimaFila + 3); i++) {
             if (tablero[i][ultimoMovimiento].equals(jugadorActual)) {
                 contarFichasV++;
             } else {
                 break;
             }
         }
-        if (contarFichasV == 4) {
-            victoria = true;
-        }
-
         // Comprobación D1 a izquierda/arriba
-        int contarFichasD1 = 0;
         int k = 0;
         for (int i = ultimaFila; i >= Math.max(0, ultimaFila - 3); i--) {
             if (tablero[i][ultimoMovimiento - k].equals(jugadorActual)) {
@@ -183,7 +177,7 @@ public class Conecta4_Main {
         }
         // Comprobación D1 a derecha/abajo
         k = 1;
-        for (int i = ultimaFila + 1; i <= Math.min(ultimaFila + 3, tablero.length-1); i++) {
+        for (int i = ultimaFila + 1; i <= Math.min(ultimaFila + 3, tablero.length - 1); i++) {
             if (ultimoMovimiento + k >= tablero[ultimaFila].length) {
                 break;
             }
@@ -194,12 +188,7 @@ public class Conecta4_Main {
             }
             k++;
         }
-        if (contarFichasD1 >= 4) {
-            victoria = true;
-        }
-
         // Comprobación D2 a derecha/arriba
-        int contarFichasD2 = 0;
         k = 0;
         for (int i = ultimaFila; i >= Math.max(0, ultimaFila - 3); i--) {
             if (tablero[i][ultimoMovimiento + k].equals(jugadorActual)) {
@@ -208,14 +197,13 @@ public class Conecta4_Main {
                 break;
             }
             k++;
-            if (ultimoMovimiento + k >= tablero[ultimaFila].length-1) {
+            if (ultimoMovimiento + k >= tablero[ultimaFila].length - 1) {
                 break;
             }
         }
-
         // Comprobación D2 a izquierda/abajo
         k = 1;
-        for (int i = ultimaFila + 1; i <= Math.min(ultimaFila + 3, tablero.length-1); i++) {
+        for (int i = ultimaFila + 1; i <= Math.min(ultimaFila + 3, tablero.length - 1); i++) {
             if (ultimoMovimiento - k < 0) {
                 break;
             }
@@ -226,7 +214,7 @@ public class Conecta4_Main {
             }
             k++;
         }
-        if (contarFichasD2 >= 4) {
+        if (contarFichasH >= 4 || contarFichasV == 4 || contarFichasD1 >= 4 || contarFichasD2 >= 4) {
             victoria = true;
         }
     }
@@ -243,7 +231,7 @@ public class Conecta4_Main {
         if (victoria) {
             if (jugadorActual.equals(JUGADOR1)) {
                 System.out.println("ENHORABUENA - HA GANADO EL JUGADOR 1 ( \"x\" )");
-            }else{
+            } else {
                 System.out.println("ENHORABUENA - HA GANADO EL JUGADOR 2 ( \"o\" )");
             }
             System.out.print("""
