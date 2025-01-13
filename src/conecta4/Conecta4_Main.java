@@ -110,7 +110,7 @@ public class Conecta4_Main {
             while (true) {
                 System.out.print("Ingrese un movimiento valido: ");
                 movActual = escanear.nextInt();
-                if (movActual >= 1 && movActual <= 6) {
+                if (movActual >= 1 && movActual <= COLUMNAS) {
                     movActual = movActual - 1;
                     break;
                 }
@@ -264,5 +264,18 @@ public class Conecta4_Main {
         }
     }
 
-
+    public static boolean volverAjugar() {
+        String respuesta;
+        while (true) {
+            System.out.print("¿Desea volver a jugar? (S/N): ");
+            respuesta = escanear.next().toUpperCase();
+            if (respuesta.equals("S")) {
+                return true;
+            } else if (respuesta.equals("N")) {
+                return false;
+            } else {
+                System.out.println("ERROR - Introduzca una respuesta válida");
+            }
+        }
+    }
 }
