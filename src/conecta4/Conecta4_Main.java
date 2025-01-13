@@ -1,4 +1,4 @@
-package conecta4_Package;
+package conecta4;
 /*
 Desarrolla un programa que emule el juego 4 en raya o también llamado conecta 4.
 Debe funcionar en consola, aparecer el tablero y las fichas de dos jugadores.
@@ -10,51 +10,95 @@ import java.util.Scanner;
 
 public class Conecta4_Main {
     static Scanner escanear = new Scanner(System.in);
-    static String jugador1 = "x";
-    static String jugador2 = "o";
+    static final String JUGADOR1 = "X";
+    static final String JUGADOR2 = "O";
     static boolean victoria;
-    static String[][] tablero = new String[7][6];
-    static int contador; // Para terminar si no quedan huecos libres
+    static final int FILAS = 6;
+    static final int COLUMNAS = 7;
+    static String[][] tablero = new String[FILAS][COLUMNAS];
+    static int contador;
     static int ultimoMovimiento;
     static int ultimaFila;
     static String jugadorActual;
 
-
     public static void main(String[] args) {
-        victoria = false;
-        contador = tablero.length * tablero[0].length;
-        rellenarTableroInicial();
-        jugadorActual = jugador1;
-
-        while (true) {
-            pintarTablero();
-            jugadorInserta();
-            comprobar4();
-            if (victoria || contador == 0) {
-                break;
+        boolean repetirPartida;
+        do {
+            victoria = false;
+            contador = FILAS * COLUMNAS;
+            rellenarTableroInicial();
+            jugadorActual = JUGADOR1;
+            cabecera();
+            
+            while (true) {               
+                pintarTablero();
+                jugadorInserta();
+                comprobar4();
+                if (victoria || contador == 0) {
+                    break;
+                }
+                cambiarJugador();
             }
-            cambiarJugador();
-        }
-        pintarTablero();
-        mensajeFinal();
+            pintarTablero();
+            mensajeFinal();
+
+            repetirPartida = volverAjugar();
+        }while(repetirPartida);
+
+
         escanear.close();
     }
 
+    public static void cabecera() {
+        System.out.print("""
+                ▐▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▌
+                ▐ ░█░█░░░█▀▀░█▀█░░░█▀▄░█▀█░█░█░█▀█ ▌
+                ▐ ░░▀█░░░█▀▀░█░█░░░█▀▄░█▀█░░█░░█▀█ ▌
+                ▐ ░░░▀░░░▀▀▀░▀░▀░░░▀░▀░▀░▀░░▀░░▀░▀ ▌
+                ▐▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▌
+                """);
+        System.out.println();
+    }
+
     public static void rellenarTableroInicial() {
-        for (int i = 0; i < tablero.length; i++) {
-            for (int j = 0; j < tablero[i].length; j++) {
+        for (int i = 0; i < FILAS; i++) {
+            for (int j = 0; j < COLUMNAS; j++) {
                 tablero[i][j] = " ";
             }
         }
     }
 
     public static void pintarTablero() {
-        for (int i = 0; i < tablero.length; i++) {
-            for (int j = 0; j < tablero[i].length; j++) {
-                System.out.print(tablero[i][j] + "\t");
-            }
-            System.out.print("\b\n");
+        //Números de cada columna
+        System.out.print("   ");
+        for (int j = 1; j <= COLUMNAS; j++) {
+            System.out.print(j + "   ");
         }
+        System.out.println();
+
+        //Borde superior
+        System.out.print("  ·");
+        for (int j = 0; j < COLUMNAS; j++) {
+            System.out.print("---·");
+        }
+        System.out.println();
+
+        //Filas
+        for (int i = 0; i < FILAS; i++) {
+            System.out.print((i + 1) + " |");
+            for (int j = 0; j < COLUMNAS; j++) {
+                System.out.print(" " + tablero[i][j] + " |");
+            }
+            System.out.println();
+
+            //Lineas que separan cada fila
+            System.out.print("  ·");
+            for (int j = 0; j < COLUMNAS; j++) {
+                System.out.print("---·");
+            }
+            System.out.println();
+        }
+        System.out.println();
     }
 
     public static void jugadorInserta() {
@@ -188,16 +232,16 @@ public class Conecta4_Main {
     }
 
     public static void cambiarJugador() {
-        if (jugadorActual.equals(jugador1)) {
-            jugadorActual = jugador2;
+        if (jugadorActual.equals(JUGADOR1)) {
+            jugadorActual = JUGADOR2;
         } else {
-            jugadorActual = jugador1;
+            jugadorActual = JUGADOR1;
         }
     }
 
     public static void mensajeFinal() {
         if (victoria) {
-            if (jugadorActual.equals(jugador1)) {
+            if (jugadorActual.equals(JUGADOR1)) {
                 System.out.println("ENHORABUENA - HA GANADO EL JUGADOR 1 ( \"x\" )");
             }else{
                 System.out.println("ENHORABUENA - HA GANADO EL JUGADOR 2 ( \"o\" )");
@@ -219,4 +263,6 @@ public class Conecta4_Main {
             System.out.println("La partida ha finalizado en empate");
         }
     }
+
+
 }
