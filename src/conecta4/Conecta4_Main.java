@@ -20,18 +20,22 @@ public class Conecta4_Main {
     // Variables que deben ser reiniciadas
     static boolean victoria;
     static int contadorCasillasVacias;
+    static String jugadorActual;
+
+    // Variables de juego
     static int ultimoMovimiento;
     static int ultimaFila;
-    static String jugadorActual;
 
     public static void main(String[] args) {
         boolean repetirPartida;
+
         do {    // Bucle para iniciar o repetir partidas
             victoria = false;
             contadorCasillasVacias = tablero.length * tablero[0].length;
-            rellenarTableroInicial();
             jugadorActual = JUGADOR1;
+
             cabecera();
+            rellenarTableroInicial();
 
             while (true) {  // Bucle de juego
                 pintarTablero();
